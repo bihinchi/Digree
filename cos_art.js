@@ -1,8 +1,4 @@
-let r = 10
-let a = 0
-let c = 20
 
-let bom = 0
 let m = 160
 
 let ms;
@@ -22,9 +18,10 @@ let radiusus;
 
 let back;
 
+let fillcolor;
+
 function setup() {
   createCanvas(600, 600);
-  m = 237//Math.round(random(1)) + 20
 
   step = 0.01
 
@@ -40,7 +37,9 @@ function setup() {
     shapes.push(random([POINTS, LINES, TRIANGLES, QUADS, QUAD_STRIP, TESS]))
     fills.push(random([true, false]))
     ms.push(Math.round(random(0, 360)))
-  }  
+  } 
+
+  fillcolor = [random(255), random(255), random(255)]
 
   back = random(240, 255)
 }
@@ -56,14 +55,14 @@ function drawShape(i) {
   stroke(colors[i])
 
   if (!fills) noFill();
-  //else fill(colors[i])
+  else fill(fillcolor)
 
   const shape = shapes[i]; 
   beginShape(shape);
 
   if (shape == POINTS) strokeWeight(5)
 
-  m = ms[i]
+  const m = ms[i]
 
   for(let i = start; i <= start + 360; i++) {
     radius += radiusStep
@@ -76,11 +75,6 @@ function drawShape(i) {
   pop();
 
   start = (start + step) % 360;
-
-  if (start > 10)
-    console.log(start);
-
-  console.log(step);
 
   if (start >= 10) {
     
@@ -102,6 +96,7 @@ function drawShape(i) {
 }
 
 
+
 function draw() {
   
   background(back)
@@ -114,7 +109,6 @@ function draw() {
 
   translate(width/2, height/2);
   strokeWeight(1)
-
 
   for (let i = 0; i < count; i++) {
     drawShape(i)  
