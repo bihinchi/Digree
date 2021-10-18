@@ -1,6 +1,16 @@
 <script>
-  let connected = false;
+  import Fertilizer from "../assets/fertilizer.svg";
+  import Shovel from "../assets/shovel.svg";
+  import Clover from "../assets/clover.svg";
+
+  
+  import { draw } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing';
+
+  let connected = true;
   let address = "";
+
+
 
   const connect = () => {
     // TODO
@@ -19,37 +29,35 @@
     fert : 0
   }
 
+
 </script>
 
 
 <nav>
   
-  <ul class="item-container">
+  {#if connected}
+    <ul transition:draw="{{delay: 250, duration: 1200, }}" 
+      class="item-container">
 
-    {#if connected}
-      <li>
-        <!-- icon here-->
-        <span>1</span>
+
+
+    { #each Object.entries(counts) as [key, value] }
+      <li on:click={() => counts[key]++} transition:draw="{{delay: 250, duration: 1200, }}">
+        
+        { #if key == "fert"}
+          <Fertilizer />
+        { :else if key == "plus"}
+          <Shovel/>
+        {:else}
+          <Clover/>
+        {/if}
         <span>x</span>
-        <span>{counts.plus}</span>
+        <span>{value}</span>
       </li>
+    {/each}
 
-      <li>
-        <!-- icon here-->
-        <span>T</span>
-        <span>x</span>
-        <span>{counts.ignore}</span>
-      </li>
-
-      <li on:click={() => counts.fert++ }>
-        <!-- icon here-->
-        <span>F</span>
-        <span>x</span>
-        <span>{counts.fert}</span>
-      </li>
-
-    {/if }
-  </ul>
+    </ul>
+  {/if }
   <div class="connector" on:click={connect}>{ connected ? address.substring(0, 6) : "Connect" }</div>
 </nav>
 
@@ -99,12 +107,31 @@
     display: flex;
     flex-wrap: wrap;
     padding: 0.3em;
-    background: linear-gradient( 323deg, rgb(200 219 248) 0%, rgb(243 254 255) 53%, rgb(255 255 255) 100%);
+    background: linear-gradient( 14deg, #8ac396 0%, #b78ac3 100%);
+    border-bottom: 1px solid #618869;
+    border-bottom-left-radius: 7%;
+    border-bottom-right-radius: 7%;
+
   }
 
   li {
     padding: 0.2em;
+    display: flex;
+    gap: 0.2em
+  }
+
+  
+  li:hover {
     cursor: pointer;
+  }
+
+  :global(li > svg) {
+    height: 100%;
+  }
+
+  :global(li > svg:hover) {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 0.2em #888);
   }
 
 </style>
