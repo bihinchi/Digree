@@ -1,19 +1,30 @@
 <script>
+
+    import Ada from "./Ada.svelte";
+
     export let labelled = "";
-    export let text;
-    export let name;
+    export let text, name, price;
+
+    export let count;
 
     let loading = false;
+    
+    let toBuy = 1
 
-    const submit = (e) => {
+    const submit = () => {
         
         if (!loading) {
             loading = true;
             setTimeout(() => {
+
+                count += toBuy;
                 loading = false;
+
             }, 5000);
         } 
     }
+
+
 </script>
 
 <div class="dropdown-menu p-2 pl-5 pr-5" aria-labelledby={labelled}>
@@ -21,62 +32,33 @@
     <h6>{name}</h6>
     <div class="mb-2 text-muted">{text}</div>
     
-    <form on:submit|preventDefault={submit} class="input-group input-group-sm  pl-3 pr-3 d-flex justify-content-around">
-        <input class="form-control" type="number" value=1 disabled={loading}/>
-        <button type="submit" class="btn btn-outline-success btn-sm" >
-
-            { #if loading } 
-
-            <svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                <circle fill="#fff" stroke="none" cx="20" cy="40" r="6">
-                <animateTransform 
-                    attributeName="transform" 
-                    dur="1s" 
-                    type="translate" 
-                    values="0 15 ; 0 -15; 0 15" 
-                    repeatCount="indefinite" 
-                    begin="0.1"/>
-                </circle>
-                <circle fill="#fff" stroke="none" cx="50" cy="40" r="6">
-                <animateTransform 
-                    attributeName="transform" 
-                    dur="1s" 
-                    type="translate" 
-                    values="0 10 ; 0 -10; 0 10" 
-                    repeatCount="indefinite" 
-                    begin="0.2"/>
-                </circle>
-                <circle fill="#fff" stroke="none" cx="80" cy="40" r="6">
-                <animateTransform 
-                    attributeName="transform" 
-                    dur="1s" 
-                    type="translate" 
-                    values="0 5 ; 0 -5; 0 5" 
-                    repeatCount="indefinite" 
-                    begin="0.3"/>
-                </circle>
-            </svg>
+    <form on:submit|preventDefault={submit} class="pl-3 pr-3 ">
+        
+        <div class="form-group">
             
-            { :else } Buy { /if }
-        </button>
+            
+            <label for="buy-{name}">Buy</label>
+            
+            <div class="input-group input-group-sm d-flex justify-content-around">
+                <input id="buy-{name}" class="form-control" type="number" min="1" max="99" bind:value={toBuy} disabled={loading}/>
+                <button type="submit" class="btn btn-outline-success btn-sm" >
+                    <Ada {loading} /> 
+                    { #if !loading}<span>{ toBuy * price }</span>{/if}
+                </button>
+            </div>
+        </div>
     </form>
 </div>
 
 <style>
 
     .dropdown-menu {
-        max-width: 25%;
+        max-width: 10vw;
         font-size: 0.6em;
     }
 
     .input-group {
         gap: 1.0em;
-    }
-
-    svg {
-        width: 3vw;
-        height: auto;
     }
 
     form input {
@@ -92,6 +74,11 @@
         box-shadow: 0 0 0 0.25rem rgb(156 69 153 / 25%);
     }
 
+    button {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
 
     button:focus  {
         background-color: #fff;
@@ -102,10 +89,14 @@
         color: #42ae7c;
     }
 
-    button  circle {
-        fill: #42ae7c;
+    :global(button:hover:not(:focus) .st0) {
+        fill: white;
     }
 
+    h6 {
+        color: rgb(158 127 185);
+        font-weight: bolder;
+    }
 
 
 </style>

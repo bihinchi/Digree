@@ -24,16 +24,19 @@
   const counts = {
     plus : {
       count: 0,
-      text: "Extra shovel let you to ignore the time limit and start digging sooner",
+      price: 5,
+      text: "Extra shovel let you ignore the time limit and start digging sooner",
       name: "Shovel"
     },
     ignore : {
       count: 0,
+      price: 10,
       text: "Increases your luck and the  probability to find something valuable",
       name: "Clover"
     },
     fert : {
       count: 0,
+      price: 8,
       text: "Speed up the growing process and let you dig a recovering hole earlier",
       name: "Fertilizer"
     },
@@ -54,6 +57,7 @@
       class="item-container">
 
     { #each Object.entries(counts) as [key, value] }
+
       <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         
         { #if key == "fert"}
@@ -67,15 +71,16 @@
         <span>{value.count}</span>
       </li>
 
-      <ItemDrop labelled={"dropdownMenuButton-" + key } text={ value.text } name={ value.name } />
+      <ItemDrop bind:count={counts[key].count} labelled={"dropdownMenuButton-" + key } {...value} />
 
     {/each}
 
     </ul>
   {/if }
-  <div class="connector" on:click={connect}>{ connected ? address.substring(0, 6) : "Connect" }</div>
-</nav>
 
+  <div class="connector" on:click={connect}>{ connected ? address.substring(0, 6) : "Connect" }</div>
+
+</nav>
 
 
 <style>
@@ -111,10 +116,9 @@
     flex-wrap: wrap;
     padding: 0.3em;
     background: linear-gradient( 14deg, #8ac396 0%, #b78ac3 100%);
-    border-bottom: 1px solid #618869;
+    border-bottom: 0.5px solid #618869;
     border-bottom-left-radius: 7%;
     border-bottom-right-radius: 7%;
-
   }
 
   li {
