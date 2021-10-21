@@ -9,7 +9,7 @@ import { svelteSVG } from "rollup-plugin-svelte-svg";
 
 import json from '@rollup/plugin-json';
 
-
+import replace from '@rollup/plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -43,6 +43,8 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+
+		
 		svelteSVG({
             svgo: {}
         }),
@@ -68,6 +70,11 @@ export default {
 		}),
 		commonjs(),
 		json(),
+
+		replace({
+			'process.env.NODE_ENV': JSON.stringify( production ? 'production' : 'development'),
+			'preventAssignment' : true
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

@@ -3,13 +3,14 @@
   import Shovel from "../assets/shovel.svg";
   import Clover from "../assets/clover.svg";
 
+  import ItemDrop from "./ItemDrop.svelte";
   
-  import { draw } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
+
 
   let connected = true;
   let address = "";
-
 
 
   const connect = () => {
@@ -18,31 +19,42 @@
     cardano.enable()
     .then(r => { if (r) return cardano.getUsedAddresses() })
     .then(a => { address = a[0]; connected = true; })
-
-    cardano.getRewardAddress()
-    .then(a => console.log(a))
   }
 
   const counts = {
-    plus : 0,
-    ignore : 0,
-    fert : 0
+    plus : {
+      count: 0,
+      text: "Extra shovel let you to ignore the time limit and start digging sooner",
+      name: "Shovel"
+    },
+    ignore : {
+      count: 0,
+      text: "Increases your luck and the  probability to find something valuable",
+      name: "Clover"
+    },
+    fert : {
+      count: 0,
+      text: "Speed up the growing process and let you dig a recovering hole earlier",
+      name: "Fertilizer"
+    },
   }
+
+
+
 
 
 </script>
 
 
+
 <nav>
   
   {#if connected}
-    <ul transition:draw="{{delay: 250, duration: 1200, }}" 
+    <ul transition:fly="{{delay: 250, duration: 1200, }}" 
       class="item-container">
 
-
-
     { #each Object.entries(counts) as [key, value] }
-      <li on:click={() => counts[key]++} transition:draw="{{delay: 250, duration: 1200, }}">
+      <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         
         { #if key == "fert"}
           <Fertilizer />
@@ -52,8 +64,11 @@
           <Clover/>
         {/if}
         <span>x</span>
-        <span>{value}</span>
+        <span>{value.count}</span>
       </li>
+
+      <ItemDrop labelled={"dropdownMenuButton-" + key } text={ value.text } name={ value.name } />
+
     {/each}
 
     </ul>
@@ -62,22 +77,6 @@
 </nav>
 
 
-
-
-<!-- <Navbar color="light" light>
-  <div>Items</div>
-
-  { #if connected }
-
-  { address.substring(0, 6) }
-
-  { :else }
-
-    <div class="flex-end connector" on:click={connect}>Connect</div>
-
-  {/if}
-
-</Navbar> -->
 
 <style>
 
@@ -91,14 +90,18 @@
   }
 
   .connector {
-    padding: 0.1em 0.5em;
-    background-color: white;
-    border-radius: 45%;
+    margin: 0 0.2em;
+    padding: 0.01em 0.2em;
+    display: flex;
+    align-items: center;
+    border-bottom-right-radius: 7%;
+
   }
 
   .connector:hover {
     cursor: pointer;
-    box-shadow: 0.02em 0.02em 0.1em 0.02em black;
+    border-bottom: 1px solid black;
+    /* box-shadow: 0.02em 0.02em 0.1em 0.02em black; */
   }
 
   nav {
@@ -130,8 +133,8 @@
   }
 
   :global(li > svg:hover) {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 0.2em #888);
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 0.1em #888);
   }
 
 </style>
