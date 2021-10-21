@@ -4,13 +4,14 @@
   import Clover from "../assets/clover.svg";
 
   import ItemDrop from "./ItemDrop.svelte";
+  import MenuDrop from "./MenuDrop.svelte";
   
   import { fly } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
 
 
-  let connected = true;
-  let address = "";
+  let connected = false;
+  let address = "1234";
 
 
   const connect = () => {
@@ -51,34 +52,48 @@
 
 
 <nav>
+
+  <div class="d-flex w-100 { connected ? "" : "justify-content-end"}">
+    {#if connected}
+      <ul transition:fly="{{delay: 250, duration: 1200, }}" 
+        class="item-container">
   
-  {#if connected}
-    <ul transition:fly="{{delay: 250, duration: 1200, }}" 
-      class="item-container">
+      { #each Object.entries(counts) as [key, value] }
+  
+        <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+          
+          { #if key == "fert"}
+            <Fertilizer />
+          { :else if key == "plus"}
+            <Shovel/>
+          {:else}
+            <Clover/>
+          {/if}
+          <span>x</span>
+          <span>{value.count}</span>
+        </li>
+  
+        <ItemDrop bind:count={counts[key].count} labelled={"dropdownMenuButton-" + key } {...value} />
+  
+      {/each}
+  
+      </ul>
 
-    { #each Object.entries(counts) as [key, value] }
+      <div class="connector account" dropdown-toggle id="account-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+        {address.substring(0, 2) + ".." + address.substring(address.length-2, address.length)}
+      </div>
 
-      <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-        
-        { #if key == "fert"}
-          <Fertilizer />
-        { :else if key == "plus"}
-          <Shovel/>
-        {:else}
-          <Clover/>
-        {/if}
-        <span>x</span>
-        <span>{value.count}</span>
-      </li>
+      <MenuDrop />
+      
+      { :else }
+      
+        <div class="connector" on:click={connect}>Connect</div>
 
-      <ItemDrop bind:count={counts[key].count} labelled={"dropdownMenuButton-" + key } {...value} />
+    {/if }
 
-    {/each}
+  </div>
+  
 
-    </ul>
-  {/if }
-
-  <div class="connector" on:click={connect}>{ connected ? address.substring(0, 6) : "Connect" }</div>
 
 </nav>
 
@@ -96,17 +111,18 @@
 
   .connector {
     margin: 0 0.2em;
-    padding: 0.01em 0.2em;
+    padding: 0.2em 0.45em;
     display: flex;
     align-items: center;
-    border-bottom-right-radius: 7%;
-
   }
 
   .connector:hover {
     cursor: pointer;
-    border-bottom: 1px solid black;
-    /* box-shadow: 0.02em 0.02em 0.1em 0.02em black; */
+    transform: scale(1.1);
+  }
+
+  .account {
+    filter: drop-shadow(0 0 0.1em #888);
   }
 
   nav {
