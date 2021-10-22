@@ -8,7 +8,7 @@
 	 { #if loading}
 		<animateTransform 
 			attributeName="transform" 
-			dur="2.5s" 
+			dur="2.0s" 
 			type="rotate" 
 			from="0" to="360"
 			repeatCount="indefinite" 
@@ -83,10 +83,10 @@
 
 
 <style>
+
 	.st0{
 		fill:#42ae7c;
 	}
-
 
     svg { 
 		max-width: 56%;

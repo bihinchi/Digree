@@ -8,18 +8,17 @@
     
 </script>
 
-    <Container fluid class="p-xs-3 p-md-5">
-        <Row class="justify-content-around ">
+    <Container class="p-xs-3 p-md-5">
+        <div class="row justify-content-around dropdown">
 
             {#each Array(60) as _, i}
-                <Cell id={i} open={i % 2 == 1}/>
+                <Cell open={i % 2 == 1}/>
             {/each}
             
             <DigDrop />
-        </Row>
+
+        </div>
 
         <!-- <DigDrop labelled="cell-{i}"/> -->
 
 	</Container>
-
-

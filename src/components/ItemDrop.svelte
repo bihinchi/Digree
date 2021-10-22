@@ -35,13 +35,11 @@
     <form on:submit|preventDefault={submit} class="pl-3 pr-3 ">
         
         <div class="form-group">
-            
-            
             <label for="buy-{name}">Buy</label>
             
             <div class="input-group input-group-sm d-flex justify-content-around">
-                <input id="buy-{name}" class="form-control" type="number" min="1" max="99" bind:value={toBuy} disabled={loading}/>
-                <button type="submit" class="btn btn-outline-success btn-sm" >
+                <input id="buy-{name}" class="form-control col" type="number" min="1" max="99" bind:value={toBuy} disabled={loading}/>
+                <button type="submit" class="btn btn-outline-success btn-sm col" >
                     <Ada {loading} /> 
                     { #if !loading}<span>{ toBuy * price }</span>{/if}
                 </button>

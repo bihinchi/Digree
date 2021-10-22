@@ -2,18 +2,47 @@
     import Fertilizer from "../assets/fertilizer.svg";
     import Shovel from "../assets/shovel.svg";
     import Clover from "../assets/clover.svg";
+
+    import Ada from "./Ada.svelte"
+
+    const cost = 2;
+
+    let loading = false;
+
+    const submit = () => {
+        if (!loading) {
+            loading = true;
+            setTimeout(() => {
+                loading = false;
+            }, 5000);
+        } 
+    }
+
+    let powerups = {
+        shovel: false,
+        clover: false,
+        fertilizer: false
+    }
+
 </script>
 
 
 <div id="context-drop" class="dropdown-menu" >
-    <ul class="p-1">
-        <li>Open</li>
-        <ul>
-            <ul class="d-flex row p-2">
-                <li class="col"><Fertilizer/></li>
-                <li class="col"><Shovel/></li>
-                <li class="col"><Clover/></li>
-            </ul>
+    <div class="d-flex justify-content-center mb-2">
+        <form on:submit|preventDefault={submit}>
+            <button type="submit" class="btn btn-outline-success btn-sm">
+                <Ada {loading} /> 
+                { #if !loading}<span>{ cost }</span>{/if}
+            </button>
+        </form>
+    </div>
+
+    <hr class="dropdown-divider">
+    <ul>
+        <ul class="d-flex row p-2 justify-content-center">
+            <li class:active={powerups.shovel} on:click={() => powerups.shovel = !powerups.shovel} class="col"><Shovel/></li>
+            <li class:active={powerups.clover} on:click={() => powerups.clover = !powerups.clover} class="col"><Clover/></li>
+            <li class:active={powerups.fertilizer} on:click={() => powerups.fertilizer = !powerups.shovfertilizerel} class="col"><Fertilizer/></li>
         </ul>
     </ul>
 </div>
@@ -32,13 +61,47 @@
         margin-bottom: 0;
     }
 
-    .dropdown-item:active,.dropdown-item:hover,.dropdown-item:focus {
-        color: #9c4ba1;
-        background-color: #fff;
+    hr {
+        color: #402f0fd6;
     }
 
-    li  {
-        transition: scale(0.4);
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button:focus  {
+        background-color: #fff;
+        box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 50%);
+    }
+
+    button:focus:hover {
+        color: #42ae7c;
+    }
+
+    .col {
+        max-width: 33%;
+    }
+    
+    :global(button:hover:not(:focus) .st0) {
+        fill: white;
+    }
+
+    :global(#context-drop li svg) {
+        max-height: 1.5em;
+
+    }
+
+    :global(#context-drop button > svg) {
+        min-height: 1.5em;
+        max-height: 2em;
+        margin-right: 0.1em;
+    }
+
+    .active {
+
     }
 
 </style>

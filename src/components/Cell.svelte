@@ -3,10 +3,10 @@
     import Ground from "../assets/Texture-ground.svg"
     import Dug from "../assets/Dug.svg"
 
-    export let open, id;
+    export let open;
 </script>
 
-<div dropdown-toggle data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" on:click={() => console.log(id)} id="cell-{id}" class="col-xs-6 col-sm-3 cols-md-1 d-flex justify-content-center mb-5">
+<div class="col-xs-5 col-sm-4 cols-md-3 col-lg-2 d-flex justify-content-center mb-5" dropdown-toggle data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 
     { #if open }
         <Dug />
@@ -16,3 +16,13 @@
 </div>
 
 
+<style>
+    div {
+        max-width: 35%;
+    }
+
+    div:hover {
+        cursor: pointer;
+    }
+    
+</style>

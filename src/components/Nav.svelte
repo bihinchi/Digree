@@ -45,8 +45,6 @@
 
 
 
-
-
 </script>
 
 
@@ -107,6 +105,7 @@
     list-style-type: none;
     padding-inline-start: 0;
     margin-bottom: 0;
+    height: 2em;
   }
 
   .connector {
@@ -140,7 +139,9 @@
   li {
     padding: 0.2em;
     display: flex;
-    gap: 0.2em
+    gap: 0.2em;
+    max-width: 25%;
+    justify-content: center;
   }
 
   
@@ -155,6 +156,11 @@
   :global(li > svg:hover) {
     transform: scale(1.1);
     filter: drop-shadow(0 0 0.1em #888);
+  }
+
+
+  nav {
+      z-index: 1;
   }
 
 </style>
