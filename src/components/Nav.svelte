@@ -10,8 +10,8 @@
   import { quintOut } from 'svelte/easing';
 
 
-  let connected = false;
-  let address = "1234";
+  let connected = true;
+  let address = "123456";
 
 
   const connect = () => {
