@@ -6,8 +6,7 @@
     export let open;
 </script>
 
-<div class="col-xs-5 col-sm-4 cols-md-3 col-lg-2 d-flex justify-content-center mb-5" dropdown-toggle data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-
+<div class="col-xs-4 col-sm-3 cols-md-2 col-lg-1 d-flex justify-content-center mb-1" dropdown-toggle data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
     { #if open }
         <Dug />
     { :else }

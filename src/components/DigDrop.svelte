@@ -42,7 +42,7 @@
         <ul class="d-flex row p-2 justify-content-center">
             <li class:active={powerups.shovel} on:click={() => powerups.shovel = !powerups.shovel} class="col"><Shovel/></li>
             <li class:active={powerups.clover} on:click={() => powerups.clover = !powerups.clover} class="col"><Clover/></li>
-            <li class:active={powerups.fertilizer} on:click={() => powerups.fertilizer = !powerups.shovfertilizerel} class="col"><Fertilizer/></li>
+            <li class:active={powerups.fertilizer} on:click={() => powerups.fertilizer = !powerups.fertilizer} class="col"><Fertilizer/></li>
         </ul>
     </ul>
 </div>
@@ -100,8 +100,10 @@
         margin-right: 0.1em;
     }
 
-    .active {
+    :global(li.active > svg) {
+        filter: drop-shadow(0 0 0.3em #b78ac3);
 
     }
+    
 
 </style>

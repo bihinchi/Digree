@@ -8,7 +8,7 @@
     
 </script>
 
-    <Container class="p-xs-3 p-md-5">
+    <Container class="p-xs-1 p-md-3">
         <div class="row justify-content-around dropdown">
 
             {#each Array(60) as _, i}

@@ -53,6 +53,9 @@
     .dropdown-menu {
         max-width: 10vw;
         font-size: 0.6em;
+        border: 0.5px solid rgb(72 45 18);
+        background-color: rgb(255 253 247);
+
     }
 
     .input-group {
@@ -79,7 +82,7 @@
     }
 
     button:focus  {
-        background-color: #fff;
+        background-color: rgb(255 253 247);
         box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 50%);
     }
 
