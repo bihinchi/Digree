@@ -6,15 +6,14 @@
 	export let url = "";
 
 	import Home from "../routes/Home.svelte";
-	import Browse from "../routes/Home.svelte";
+	import Browser from "../routes/Browser.svelte";
 
 </script>
 
 
 <Router url="{url}">
-<div>
-	<Route path="/"><Home /></Route>
-    <Route path="blog" component="{Browse}" />
-    <Route path="about" component="{About}" />
-</div>
+	<div>
+		<!-- <Route path="/"><Home /></Route> -->
+		<Route path="/" component="{Browser}" />
+	</div>
 </Router>
