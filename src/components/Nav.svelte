@@ -49,7 +49,7 @@
 
 
 
-<nav>
+<nav class="mb-4">
 
   <div class="d-flex w-100 { connected ? "" : "justify-content-end"}">
     {#if connected}
