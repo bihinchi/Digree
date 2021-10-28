@@ -37,6 +37,7 @@
     "@rollup/plugin-replace": "^3.0.0",
     "lodash": "^4.17.21",
     "sirv-cli": "^1.0.0",
+    "svelte-routing": "^1.6.0",
     "svelte-spinkit": "^1.0.3",
     "sveltestrap": "^5.6.3",
     "tippy.js": "^6.3.2"
