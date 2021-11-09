@@ -7,7 +7,7 @@
     <ul class="">
         <li><Link class="dropdown-item" to="browsing">My collection</Link></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+        <!-- <li><a class="dropdown-item" href="#">Sign out</a></li> -->
     </ul>
 </div>
 
@@ -18,9 +18,9 @@
         margin-bottom: 0;
     }
 
-    .dropdown-item:active,.dropdown-item:hover,.dropdown-item:focus {
+    /* .dropdown-item:active,.dropdown-item:hover,.dropdown-item:focus {
         color: #9c4ba1;
         background-color: #fff;
-    }
+    } */
 
 </style>
