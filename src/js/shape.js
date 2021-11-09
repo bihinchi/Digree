@@ -9,6 +9,7 @@ export const ShapeType = {
     STRIPES : 5 
 }
 
+
 export const shapeP5 = function(shapeType, p5) {
     if (shapeType === ShapeType.POINTS) return p5.POINTS;
     else if (shapeType === ShapeType.LINES) return p5.LINES;
@@ -20,9 +21,7 @@ export const shapeP5 = function(shapeType, p5) {
 }
 
 
-
-export class Shape {
-    
+export class Shape {    
 
     constructor(tokenMeta) {
         this.angle = tokenMeta.angle
@@ -68,6 +67,5 @@ export class Shape {
             this.fill(50, 350, 1, 5);
         }
     }
-
 
 }

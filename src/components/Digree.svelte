@@ -1,27 +1,114 @@
 <script>
-    export let angle;
+	import P5 from 'p5-svelte';
 
-    import P5 from 'p5-svelte';
+	import { Shape, ShapeType, shapeP5 } from "../js/shape"
 
 
-	const canvasWidth = 200;
-	const canvasHeight = 200;
-	
+	const canvasWidth = 600;
+	const canvasHeight = 600;
 	const background_color = 255;
-	let initRadius = canvasWidth / 6;
+
+
+	export let angle = 0;
+
 	
-	let stepMaker = 216;
+	const shape = new Shape({ angle, shapeType : ShapeType.DEFAULT })
+
+	$: shape.changeAngle(angle);
+
+	let strokeColor = { hue : 100, saturation : 80, brightness: 35 };
+	$: stroke = [strokeColor.hue, strokeColor.saturation, strokeColor.brightness]
+
+
+	const params = {
+		radius : {
+			value: canvasWidth / 6,
+			min: canvasWidth / 9,
+			max: canvasWidth / 6,
+			baseVelocity: 1,
+			velocity: 1,
+			velMin: 0.1,
+			acceleration: 1.01,
+			accThreshold: 0.95,
+			delay: 0,
+			delayActive: false
+		},
+
+		radiusStep : {
+			value: 250,
+			min: shape.zoomMin,
+			max: shape.zoomMax,
+			baseVelocity: 1.0,
+			velocity: 1.0,
+			velMin: 0.005,
+			acceleration: 1 + 1e-12,
+			accThreshold: 0.92,
+			delay: 1600,
+			delayActive: false,
+			delayFinished: false
+		}, 
+
+		angle : {
+			value: angle,
+			min: angle - 0.5,
+			max: angle + 0.4999,
+			baseVelocity: 0.00001,
+			velocity: 0.00001,
+			velMin: 0.0000005,
+			acceleration: 1.0000001,
+			accThreshold: 0.95,
+			delay: 1500,
+			delayActive: false,
+			delayFinished: false
+		},
+
+		strokeHue : {
+			value: strokeColor.hue,
+			min: 0,
+			max: 360,
+			baseVelocity: 0.01,
+			velocity: 0.01,
+			velMin: 0.00005,
+			acceleration: 1.000001,
+			accThreshold: 0.95,
+			delay: 1500,
+			delayActive: false,
+			delayFinished: false
+		},
+
+		strokeWeight : {
+			value: 3,
+			min: shape.strokeWeightMin,
+			max: shape.strokeWeightMax,
+			baseVelocity: 0.01,
+			velocity: 0.01,
+			velMin: 0.00005,
+			acceleration: 1.000001,
+			accThreshold: 0.95,
+			delay: 500,
+			delayActive: false,
+			delayFinished: false
+		}
+	}
+
+	$: {
+		params.angle.value = angle;
+		
+		params.radiusStep.min = shape.zoomMin;
+		params.radiusStep.max = shape.zoomMax;
+
+		params.strokeWeight.min = shape.strokeWeightMin;
+		params.strokeWeight.max = shape.strokeWeightMax;
+	}
 	
-	let points = 60;
+
+	let points = 50;
 	
 	let fillObject = { r : 0, g : 0, b : 0 }
 	
-	let step = 0.01;
 
-	let shape ;
-
-	//let angle = 111
-	let start = 9;
+	let rotation = 0
+	let start = 0;
 
 	let shapes = []
 
@@ -29,84 +116,116 @@
 
 	$: fillcolor = [fillObject.r, fillObject.g, fillObject.b]
 
-	$: if (shape && (shape.name == "points" || shape.name == "lines")) fill = false
-
-	let strokecolor;
 
 
-	function colorCallback(rgba) {
-		const d = rgba.detail
-		strokecolor = [d.r, d.g, d.b]
-	}
+	function paramsChanger(key) {
 
-	function fillColorCallback(rgba) {
-		const d = rgba.detail
-		fillcolor = [d.r, d.g, d.b]
+		const param = params[key]
+
+		const { min, max, velMin, baseVelocity, acceleration, accThreshold, 
+			delay, delayActive, delayFinished } = param;
+		
+		if (delayActive) return;
+		
+		let { velocity, value } = param;
+
+		value += velocity;
+		
+		if ((velocity > 0 && value >= max) || (velocity <= 0 && value <= min)) {
+			if (delay > 0 && !delayFinished) {
+				param.delayActive = true;
+				setTimeout(() => {
+					velocity *= -1
+					param.delayActive = false;
+					param.delayFinished = true
+				}, delay);
+			} else {
+				velocity *= -1
+				param.delayFinished = false
+			}
+		}
+
+
+		if (velocity > 0) {
+
+			if (value/max >= accThreshold ) {
+				velocity =  Math.max(velMin, velocity / acceleration);
+			} else if (velocity != baseVelocity) {
+				velocity = Math.min(velocity * acceleration, baseVelocity)
+			}
+
+		} else {
+
+			if (min/value >= accThreshold) {
+				velocity = Math.min(velocity / acceleration, -velMin);
+			} else if (velocity != -baseVelocity) {
+				velocity = Math.max(velocity * acceleration, -baseVelocity)
+			}
+		}
+
+		param.value = value;
+		param.velocity = velocity;
+
 	}
 
 
 
 	function drawShape(p5) {
   
-		p5.push();
-
-		let radius = initRadius;
-
-
-		const radiusStep = radius / stepMaker;
-
-		p5.stroke(strokecolor)
+		let curRadius = params.radius.value;
+		const radiusStep = curRadius / params.radiusStep.value // stepMaker != 360 ? curRadius / stepMaker : 0;
 		
+		p5.stroke(stroke)
 		
 		if (fill) p5.fill(fillcolor)
 
-		if (shape?.name == "points") p5.strokeWeight(10)
-		p5.beginShape(shape?.value);
 
-		//if (shape == POINTS) strokeWeight(5)
-		
+		p5.beginShape(shapeP5(shape.shapeType, p5));
+
+
 		for(let i = start; i <= start + points; i++) {
-			radius += radiusStep
-			const x = p5.cos(p5.radians(i*angle)) * radius;
-			const y = p5.sin(p5.radians(i*angle)) * radius;
-			p5.vertex(x, y);
+
+			p5.rotate(p5.radians(rotation))
+
+			curRadius +=  radiusStep
+			const x = p5.cos(p5.radians(i*params.angle.value)) * curRadius;
+			const y = p5.sin(p5.radians(i*params.angle.value)) * curRadius;
+			
+			//if (x >= p5.width*(-4.5) && x <= p5.width*(4.5) && y >= p5.height*(-4.5) && y < p5.height * 4.5 )
+				p5.vertex(x, y);
+			
+		}
+
+	
+		rotation = (rotation + 0.008) % points ;
+
+		strokeColor = {
+			...strokeColor,
+			hue: (strokeColor.hue + 0.5) % 360,
+			saturation: (strokeColor.saturation + 0.002) % 100,
+			brightness: (strokeColor.brightness + 0.001) % 75,
 		}
 
 		p5.endShape();
-
-		p5.pop();
-
-
-		start = (start + step) % points;
-
-		if (start >= 10) {
-		
-			if (step > 0.0000000001) step = step / 10;
-			else if (step > 0) step *= -1;;
-
-			if (step < 0 && step >= -0.01) step *= 10;
-		}
-
-		if (start <= 9) {
-
-			if (step < -0.0000000001) step /= 10;
-			else if (step < 0) step *= -1;
-
-			if (step > 0 && step <= 0.01) step *= 10;
-		}
-
-
 
 	}
 
 
 
+
 	function draw(p5) {
+		p5.clear();
 		p5.background(background_color)
 
 		p5.translate(p5.width/2, p5.height/2);
-		p5.strokeWeight(2);
-		drawShape(p5)  
+		p5.strokeWeight(params.strokeWeight.value)
+		drawShape(p5);
+
+		//paramsChanger('radius')
+		paramsChanger('radiusStep')
+		paramsChanger('strokeWeight')
+		paramsChanger('angle')
+
 	}
 
 
@@ -114,9 +233,15 @@
 
 	const sketch = (p5) => {
 		p5.setup = () => {
-			p5.createCanvas(canvasWidth, canvasHeight, 'svg');
-			strokecolor = [p5.random(256), p5.random(256), p5.random(256)]
-			p5.frameRate(35);
+			p5.createCanvas(canvasWidth, canvasHeight);
+
+			
+			p5.colorMode(p5.HSB, 360, 100, 100)
+
+			strokeColor = { hue : p5.random(360), saturation : 80, brightness: p5.random(35, 80) };
+
+
+			p5.frameRate(85);
 
 			shapes = [
 				{ name: "default", value: undefined },
@@ -127,11 +252,13 @@
 				{ name: "quads", value: p5.QUADS },
 				{ name: "quads strip", value: p5.QUAD_STRIP }
 			]
+			
 		};
 
 		p5.draw = () => draw(p5);
 	};
 </script>
+
 
 
 <div>
@@ -171,6 +298,7 @@
 	  </select> -->
 
 </div>
+
 
 <P5 {sketch} />
 
