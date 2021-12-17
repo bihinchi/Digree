@@ -1,14 +1,9 @@
 <script>
-	import { Container, Row } from "sveltestrap"
-
     import DigDrop from "./DigDrop.svelte";
-
-
 	import Cell from "./Cell.svelte";
-    
 </script>
 
-<main class="container p-xs-1 p-md-3">
+<div class="container p-xs-1 p-md-3">
 
     <div class="row justify-content-around dropdown">
 
@@ -20,4 +15,7 @@
 
     </div>
     
-</main>
+</div>
+
+<style>
+</style>

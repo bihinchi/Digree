@@ -1,7 +1,7 @@
 <script>
-    import Fertilizer from "../assets/fertilizer.svg";
-    import Shovel from "../assets/shovel.svg";
-    import Clover from "../assets/clover.svg";
+    import Fertilizer from "/static/assets/fertilizer.svg";
+    import Shovel from "/static/assets/shovel.svg";
+    import Clover from "/static/assets/clover.svg";
 
     import Ada from "./Ada.svelte"
 

@@ -1,10 +1,10 @@
 <script>
-  import Fertilizer from "../assets/fertilizer.svg";
-  import Shovel from "../assets/shovel.svg";
-  import Clover from "../assets/clover.svg";
+  import Fertilizer from "/static/assets/fertilizer.svg";
+  import Shovel from "/static/assets/shovel.svg";
+  import Clover from "/static/assets/clover.svg";
 
-  import ItemDrop from "./ItemDrop.svelte";
-  import MenuDrop from "./MenuDrop.svelte";
+  import ItemDrop from "/src/components/ItemDrop.svelte";
+  import MenuDrop from "/src/components/MenuDrop.svelte";
   
   import { fly } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
@@ -49,7 +49,7 @@
 
 
 
-<nav class="mb-4">
+<nav class="mb-xs-2 mb-md-4">
 
   <div class="d-flex w-100 { connected ? "" : "justify-content-end"}">
     {#if connected}

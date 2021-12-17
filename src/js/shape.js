@@ -17,8 +17,8 @@ export const shapeP5 = function(shapeType, p5) {
     if (shapeType === ShapeType.QUADS) return p5.QUADS;
     if (shapeType === ShapeType.STRIPES) return p5.QUAD_STRIP;
     if (shapeType === ShapeType.POINTS) return p5.POINTS;
-
 }
+
 
 
 export class Shape {    
@@ -48,24 +48,25 @@ export class Shape {
         }
         
         else if (this.angle < 10) {
-            this.fill(120, 450, 1, 15);
+            this.fill(120, 250, 1, 10);
         } 
         
         else if (this.angle < 15) {
-            this.fill(105, 420, 1, 5)
+            this.fill(105, 220, 1, 3)
         } 
         
         else if (this.angle < 20) {
-            this.fill(105, 420, 1, 5)
+            this.fill(105, 220, 1, 3)
         } 
         
         else if (this.angle < 20) {
-            this.fill(105, 400, 1, 5)
+            this.fill(105, 200, 1, 3)
         } 
         
         else {
-            this.fill(50, 350, 1, 5);
+            this.fill(15, 220, 0.6, 0.8);
         }
+
     }
 
 }

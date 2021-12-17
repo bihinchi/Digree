@@ -1,11 +1,8 @@
-<script>
-      import { Link } from "svelte-routing";
 
-</script>
 
 <div class="dropdown-menu" aria-labelledby="account-dropdown">
     <ul class="">
-        <li><Link class="dropdown-item" to="browsing">My collection</Link></li>
+        <li><a class="dropdown-item" href="/collection">My collection</a></li>
         <li><hr class="dropdown-divider"></li>
         <!-- <li><a class="dropdown-item" href="#">Sign out</a></li> -->
     </ul>

@@ -1,9 +1,8 @@
-<script>
-
-    import Ground from "../assets/Texture-ground.svg"
-    import Dug from "../assets/Dug.svg"
-
-    export let open;
+<script lang="ts">
+    import Ground from "/static/assets/Texture-ground.svg"
+    import Dug from "/static/assets/Dug.svg"
+    
+    export let open : boolean = false;
 </script>
 
 <div class="col-xs-4 col-sm-3 cols-md-2 col-lg-1 d-flex justify-content-center mb-1" dropdown-toggle data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">

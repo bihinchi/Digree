@@ -1,15 +1,26 @@
-<script>
-	import P5 from 'p5-svelte';
+<script lang="ts">
+	
+	let P5 : SvelteComponent;
 
 	import { Shape, ShapeType, shapeP5 } from "../js/shape"
 
+	import { onMount } from "svelte";
 
-	const canvasWidth = 600;
-	const canvasHeight = 600;
-	const background_color = 255;
+	onMount(async () => {
+		(await import('p5')).default;
+		(await import('p5.js-svg')).default;
+		P5 = (await import('p5-svelte')).default;
+	})
 
+	let canvasHeight, canvasWidth;
+	
+	const background_color = 250;//[35, 9, 100];
 
 	export let angle = 0;
+
+	/* setInterval(() => {
+		angle = (angle + 1) % 360
+	}, 3500); */
 
 	
 	const shape = new Shape({ angle, shapeType : ShapeType.DEFAULT })
@@ -77,13 +88,13 @@
 		},
 
 		strokeWeight : {
-			value: 3,
+			value: 1,
 			min: shape.strokeWeightMin,
 			max: shape.strokeWeightMax,
-			baseVelocity: 0.01,
-			velocity: 0.01,
+			baseVelocity: 0.002,
+			velocity: 0.002,
 			velMin: 0.00005,
-			acceleration: 1.000001,
+			acceleration: 1.0000001,
 			accThreshold: 0.95,
 			delay: 500,
 			delayActive: false,
@@ -101,8 +112,14 @@
 		params.strokeWeight.max = shape.strokeWeightMax;
 	}
 	
+	$: {
+		params.radius.value = canvasWidth / 6
+		params.radiusStep.value = params.radius.value * 2.5
 
-	let points = 50;
+	}
+
+
+	let points = 250;
 	
 	let fillObject = { r : 0, g : 0, b : 0 }
 	
@@ -216,15 +233,14 @@
 	function draw(p5) {
 		p5.clear();
 		p5.background(background_color)
-
+		p5.noFill();
 		p5.translate(p5.width/2, p5.height/2);
 		p5.strokeWeight(params.strokeWeight.value)
 		drawShape(p5);
 
-		//paramsChanger('radius')
 		paramsChanger('radiusStep')
 		paramsChanger('strokeWeight')
-		paramsChanger('angle')
+		//paramsChanger('angle')
 
 	}
 
@@ -233,13 +249,19 @@
 
 	const sketch = (p5) => {
 		p5.setup = () => {
-			p5.createCanvas(canvasWidth, canvasHeight);
 
+
+			canvasHeight = p5.windowHeight * 0.55;
+			canvasWidth = canvasHeight;
+			
+
+			//init.default(p5lib)
+
+			p5.createCanvas(canvasWidth, canvasHeight, 'svg');
 			
 			p5.colorMode(p5.HSB, 360, 100, 100)
 
 			strokeColor = { hue : p5.random(360), saturation : 80, brightness: p5.random(35, 80) };
-
 
 			p5.frameRate(85);
 
@@ -256,56 +278,34 @@
 		};
 
 		p5.draw = () => draw(p5);
+		p5.windowResized = () => {
+			canvasHeight =  p5.windowHeight * 0.55
+			canvasWidth = canvasHeight //p5.windowWidth * 0.4;
+			p5.resizeCanvas(canvasWidth, canvasHeight)
+		}
+
 	};
+
+	/* setInterval(() => {
+		angle += 1
+	}, 10000); */
 </script>
 
 
+{ #if P5}
+	<P5 {sketch} />
+{/if}
 
-<div>
-	<!-- <label>
-	  Angle
-	  <input type="number" bind:value={angle} min="0" max="360" step="1" />
-	</label>
-
-	<label>
-		Init radius
-		<input type="number" bind:value={initRadius} min="1" max="360" step="1" />
-	  </label>
-
-	<label>
-	  Step radius
-	  <input type="number" bind:value={stepMaker} min="1" max="360" step="1" />
-	</label>
-
-	<label>
-	  Points
-	  <input type="number" bind:value={points} min="10" max="1000" step="1" />
-	</label>
-
-	<label>
-	  Fill
-	  <input type="checkbox" bind:checked={fill}/>
-	  { fill ? " filling " : "not filling"}
-	</label>
-
-	  <select bind:value={shape} on:change={() => 
-	  {	 if (!shape || shape.name == "points" || shape.name == "lines") fill = false }}>
-		  {#each shapes as shape, i}
-			  <option value={shape}>
-				  {shape.name}
-			  </option>
-		  {/each}
-	  </select> -->
-
-</div>
-
-
-<P5 {sketch} />
 
 
 <style>
-	:global(canvas) {
-		width: 100%!important;
-		height: 100%!important;
+	
+	:global(.p5Canvas) {
+		border:0.5px solid rgb(48, 136, 70);
+
+		/* min-width: 50%;
+		max-width: 100%; */
 	}
+
+
 </style>
