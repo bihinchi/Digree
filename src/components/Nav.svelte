@@ -9,6 +9,12 @@
   import { fly } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
 
+  import { page } from '$app/stores';
+
+	import { web3 } from "../js/stores";
+  import { onMount } from "svelte";
+
+  
 
   let connected = false;
   let address = "123456";
@@ -19,8 +25,18 @@
     // if () {}
     cardano.enable()
     .then(r => { if (r) return cardano.getUsedAddresses() })
-    .then(a => { address = a[0]; connected = true; })
+    .then(a => { 
+      address = a[0]; 
+      connected = true; 
+      web3.connected = true;
+      localStorage.setItem('connected', 'true');
+    })
   }
+
+  onMount(() => {
+    connected = localStorage.getItem('connected') == "true";
+    if (connected) connect();
+  })
 
   const counts = {
     plus : {
@@ -44,7 +60,6 @@
   }
 
 
-
 </script>
 
 
@@ -52,28 +67,36 @@
 <nav class="mb-xs-2 mb-md-4">
 
   <div class="d-flex w-100 { connected ? "" : "justify-content-end"}">
-    {#if connected}
-      <ul transition:fly="{{delay: 250, duration: 1200, }}" 
-        class="item-container">
+    {#if connected  }
+
+      <ul in:fly="{{delay: 250, duration: 1200, }}" 
+        class="item-container" class:nothome={$page.path !== '/'}>
+
+        { #if $page.path == '/'} 
+
+          { #each Object.entries(counts) as [key, value] }
+      
+            <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              
+              { #if key == "fert"}
+                <Fertilizer />
+              { :else if key == "plus"}
+                <Shovel/>
+              {:else}
+                <Clover/>
+              {/if}
+              <span>x</span>
+              <span>{value.count}</span>
+            </li>
+      
+            <ItemDrop bind:count={counts[key].count} labelled={"dropdownMenuButton-" + key } {...value} />
+      
+          {/each}
+        
+        { :else }
+            <li><a href="/">Home</a></li>
+        { /if }
   
-      { #each Object.entries(counts) as [key, value] }
-  
-        <li dropdown-toggle id="dropdownMenuButton-{key}" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-          
-          { #if key == "fert"}
-            <Fertilizer />
-          { :else if key == "plus"}
-            <Shovel/>
-          {:else}
-            <Clover/>
-          {/if}
-          <span>x</span>
-          <span>{value.count}</span>
-        </li>
-  
-        <ItemDrop bind:count={counts[key].count} labelled={"dropdownMenuButton-" + key } {...value} />
-  
-      {/each}
   
       </ul>
 
@@ -86,6 +109,7 @@
       { :else }
       
         <div class="connector" on:click={connect}>Connect</div>
+
 
     {/if }
 
@@ -149,6 +173,11 @@
     cursor: pointer;
   }
 
+  .nothome {
+    padding-inline-start: 5%;
+    justify-content: start;
+  }
+
   :global(li > svg) {
     height: 100%;
   }
@@ -161,6 +190,17 @@
 
   nav {
       z-index: 1;
+  }
+
+  a {
+    color: black;
+    filter: drop-shadow(0 0 0.1em #888);
+    text-decoration: none;
+  }
+
+  a:hover {
+    cursor: pointer;
+    transform: scale(1.1);
   }
 
 </style>
