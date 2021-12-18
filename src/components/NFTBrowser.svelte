@@ -3,7 +3,7 @@
 
 
 
-    let nfts = [101];
+    let nfts = [101, 256, 181, 215, 359, 400, 101, 256, 181, 215, 359, 400];
     let angle = 181;
 
 </script>
@@ -15,15 +15,15 @@
 
         { #if nfts.length > 0}
 
-            <div class="mt-2 col-xs-10 col-sm-3 d-flex justify-content-center align-items-start">
-                <div class="nums rounded p-1">
+            <div class="mt-2 col-4 d-flex justify-content-center align-items-center">
+                <div class="nums rounded">
                     { #each nfts as nft }
                         <div class="m-1 rounded nft px-1 ib" 
                         on:click={()=>angle=nft}>{ nft }</div>
                     {/each }
                 </div>
             </div>
-            <div class="mt-2 col-xs-10 col-sm-8 d-flex justify-content-center align-items-center">
+            <div class="mt-2  col-8 d-flex justify-content-center align-items-center">
                 <Digree {angle}/>
             </div>
 
@@ -42,14 +42,18 @@
 <style>
 
     .nums {
-        border:0.5px solid rgb(48, 136, 70);
+        border:0.8px solid rgb(48, 136, 70);
         background-color: white;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
     }
 
     .nft { 
         color: white;
-        background-color: green; 
-        border: 1px solid green; 
+        background-color: #9acd9a; 
+        border: 1px solid green 
     }
 
     .nft:hover {

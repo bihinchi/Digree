@@ -1,16 +1,10 @@
 <script lang="ts">
-	
+	import { Shape, ShapeType, shapeP5 } from "../js/shape"
+	import { onMount } from "svelte";
+	import { web3 } from "../js/stores";
+
 	let P5 : SvelteComponent;
 
-	import { Shape, ShapeType, shapeP5 } from "../js/shape"
-
-	import { onMount } from "svelte";
-
-	onMount(async () => {
-		(await import('p5')).default;
-		(await import('p5.js-svg')).default;
-		P5 = (await import('p5-svelte')).default;
-	})
 
 	let canvasHeight, canvasWidth;
 	
@@ -289,6 +283,25 @@
 	/* setInterval(() => {
 		angle += 1
 	}, 10000); */
+
+	
+
+	onMount(async () => {
+
+		(() => {
+			setTimeout(() => {
+				if (!web3.connected) {
+					window.location = "/"
+				}
+			}, 1200)
+		})();
+
+		
+		(await import('p5')).default;
+		(await import('p5.js-svg')).default;
+		P5 = (await import('p5-svelte')).default;
+	})
+
 </script>
 
 
