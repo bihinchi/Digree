@@ -9,20 +9,26 @@
 
     let loading = false;
 
+    const powerups  = {
+        shovel: false,
+        clover: false,
+        fertilizer: false
+    }
+
     const submit = () => {
         if (!loading) {
             loading = true;
             setTimeout(() => {
                 loading = false;
+
+                Object.keys(powerups).forEach(key => {
+                    powerups[key] = false;
+                })
+
             }, 5000);
         } 
     }
 
-    let powerups = {
-        shovel: false,
-        clover: false,
-        fertilizer: false
-    }
 
 </script>
 
@@ -53,7 +59,10 @@
 <style>
     .dropdown-menu {
         max-width: 5em;
+        border: 1px solid rgb(117, 26, 102);
+        background-color: rgb(255, 255, 255);    
     }
+
     
     ul {
         list-style-type: none;
@@ -101,8 +110,7 @@
     }
 
     :global(li.active > svg) {
-        filter: drop-shadow(0 0 0.3em #b78ac3);
-
+        filter: drop-shadow(0 0 0.35em rgb(90, 2, 90));
     }
     
 

@@ -53,9 +53,8 @@
     .dropdown-menu {
         max-width: 10vw;
         font-size: 0.6em;
-        border: 0.5px solid rgb(72 45 18);
+        border: 1px solid rgb(72 45 18);
         background-color: rgb(255 253 247);
-
     }
 
     .input-group {
